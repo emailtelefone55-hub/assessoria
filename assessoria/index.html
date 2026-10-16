@@ -1386,72 +1386,86 @@
             display: none;
         }
 
-        /* ===== CONFERÊNCIA DE DADOS: hierarquia clara e acabamento institucional ===== */
+        /* ===== CONFERÊNCIA DE DADOS: painel claro, compacto e responsivo ===== */
         .review-section {
+            --review-border: #dbe3ed;
             background: #fff;
-            border: 1px solid #d7e2ee;
+            border: 1px solid var(--review-border);
             border-radius: 14px;
-            margin: 0 0 28px;
+            margin: 0 0 24px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, .055);
+            box-shadow: 0 4px 16px rgb(15 23 42 / .045);
         }
         .review-header {
-            min-height: 76px;
+            width: 100%;
+            min-height: 72px;
             padding: 16px 20px;
-            background: linear-gradient(110deg, #f7faff 0%, #fff 72%);
             border: 0;
+            background: #fff;
+            color: inherit;
+            font: inherit;
+            text-align: left;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
             cursor: pointer;
-            transition: background .2s ease, box-shadow .2s ease;
+            transition: background .18s ease, box-shadow .18s ease;
         }
-        .review-header:hover { background: #f2f7fd; }
+        .review-header:hover { background: #f8faff; }
         .review-header:focus-visible { outline: 3px solid #bfdbfe; outline-offset: -3px; }
-        .review-header.expanded { border-bottom: 1px solid #e2e8f0; }
-        .review-header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+        .review-header.expanded { background: #fbfdff; border-bottom: 1px solid #e7edf4; }
+        .review-header-left { display: flex; align-items: center; gap: 13px; min-width: 0; }
         .review-header-icon {
-            flex: 0 0 42px; width: 42px; height: 42px;
-            display: grid; place-items: center; border-radius: 12px;
-            color: #1e40af; background: #eaf2ff; font-size: 17px;
+            flex: 0 0 40px; width: 40px; height: 40px;
+            display: grid; place-items: center; border-radius: 11px;
+            color: #1e40af; background: #edf3ff; font-size: 16px;
         }
-        .review-heading { display: flex; flex-direction: column; gap: 3px; }
+        .review-heading { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
         .review-header-text { font-size: 16px; line-height: 1.35; font-weight: 700; color: #172554; }
         .review-header-hint { font-size: 12px; line-height: 1.45; color: #64748b; }
-        .review-header-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .review-header-right { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
         .review-status {
-            display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
-            border: 1px solid #bbf7d0; border-radius: 999px; background: #f0fdf4;
-            color: #166534; font-size: 11px; line-height: 1; font-weight: 700; white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px;
+            border: 1px solid #ccebd8; border-radius: 999px; background: #f2fbf5;
+            color: #267044; font-size: 11px; line-height: 1; font-weight: 650; white-space: nowrap;
         }
-        .review-header-arrow { color: #64748b; font-size: 13px; transition: transform .25s ease; }
+        .review-header-arrow { color: #64748b; font-size: 13px; transition: transform .22s ease; }
         .review-header.expanded .review-header-arrow { transform: rotate(180deg); }
-        .review-content { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
-        .review-content.expanded { max-height: 1200px; }
-        .review-content-inner { padding: 20px; }
-        .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .review-content { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+        .review-content.expanded { max-height: 1600px; }
+        .review-content-inner { padding: 18px 20px 20px; }
+        .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
         .review-item {
-            min-width: 0; padding: 14px 15px; background: #fff;
-            border: 1px solid #e5eaf1; border-radius: 10px;
-            transition: border-color .18s ease, background .18s ease;
+            min-width: 0; padding: 13px 14px; background: #fbfcfe;
+            border: 1px solid #e7edf4; border-radius: 9px;
         }
-        .review-item:hover { border-color: #cbd8e8; background: #fbfdff; }
-        .review-item-label { margin-bottom: 5px; color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; }
+        .review-item-label { margin-bottom: 5px; color: #64748b; font-size: 10px; line-height: 1.35; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
         .review-item-value { color: #1e293b; font-size: 14px; line-height: 1.5; font-weight: 600; overflow-wrap: anywhere; }
         .review-item-value.empty { color: #94a3b8; font-weight: 400; font-style: italic; }
         @media (max-width: 560px) {
-            .review-header { min-height: 70px; padding: 14px; gap: 10px; }
+            .review-section { margin-bottom: 20px; border-radius: 12px; }
+            .review-header { min-height: 0; padding: 14px 13px; gap: 8px; }
             .review-header-left { gap: 10px; }
-            .review-header-icon { flex-basis: 38px; width: 38px; height: 38px; }
+            .review-header-icon { flex-basis: 36px; width: 36px; height: 36px; border-radius: 10px; font-size: 15px; }
+            .review-header-text { font-size: 15px; }
             .review-header-hint { font-size: 11px; }
             .review-header-right { gap: 8px; }
             .review-status { padding: 6px 8px; font-size: 10px; }
-            .review-content-inner { padding: 14px; }
-            .review-grid { grid-template-columns: 1fr; gap: 9px; }
+            .review-content-inner { padding: 12px; }
+            .review-grid { grid-template-columns: 1fr; gap: 8px; }
+            .review-item { padding: 11px 12px; }
+        }
+        @media (max-width: 380px) {
+            .review-header { align-items: flex-start; }
+            .review-header-right { padding-top: 2px; }
+            .review-status { font-size: 0; gap: 0; width: 28px; height: 28px; justify-content: center; padding: 0; }
+            .review-status i { font-size: 12px; }
+            .review-header-arrow { margin: 7px 2px 0 0; }
+            .review-header-hint { max-width: 205px; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .review-header, .review-header-arrow, .review-content, .review-item { transition: none; }
+            .review-header, .review-header-arrow, .review-content { transition: none; }
         }
 
 </style>
@@ -1792,7 +1806,7 @@
 
                     <div class="form-content">
                         <div class="review-section">
-                            <div class="review-header" onclick="toggleReviewSection()" role="button" tabindex="0" aria-controls="reviewContent" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewSection();}">
+                            <button type="button" class="review-header" onclick="toggleReviewSection()" aria-controls="reviewContent" aria-expanded="false">
                                 <div class="review-header-left">
                                     <i class="fas fa-clipboard-check review-header-icon" aria-hidden="true"></i>
                                     <span class="review-heading">
@@ -1804,7 +1818,7 @@
                                     <span class="review-status"><i class="fas fa-shield-alt" aria-hidden="true"></i> Revisão segura</span>
                                     <i class="fas fa-chevron-down review-header-arrow" aria-hidden="true"></i>
                                 </span>
-                            </div>
+                            </button>
                             <div class="review-content" id="reviewContent">
                                 <div class="review-content-inner">
                                     <div class="review-grid" id="reviewGrid"></div>
