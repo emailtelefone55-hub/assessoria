@@ -15,7 +15,6 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
-    "helmet": "^8.1.0",
-    "pg": "^8.23.1"
+    "helmet": "^8.1.0"
   }
 }
