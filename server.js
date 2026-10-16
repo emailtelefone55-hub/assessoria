@@ -204,7 +204,7 @@ app.get('/', (_req, res) => {
 
 app.get(['/assessoria', '/assessoria/'], (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  res.sendFile(path.join(__dirname, 'assessoria.html'));
+  res.sendFile(path.join(__dirname, 'assessoria', 'index.html'));
 });
 
 app.use((error, _req, res, _next) => {
