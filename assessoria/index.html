@@ -1385,6 +1385,75 @@
         body.review-open .sidebar {
             display: none;
         }
+
+        /* ===== CONFERÊNCIA DE DADOS: hierarquia clara e acabamento institucional ===== */
+        .review-section {
+            background: #fff;
+            border: 1px solid #d7e2ee;
+            border-radius: 14px;
+            margin: 0 0 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .055);
+        }
+        .review-header {
+            min-height: 76px;
+            padding: 16px 20px;
+            background: linear-gradient(110deg, #f7faff 0%, #fff 72%);
+            border: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: background .2s ease, box-shadow .2s ease;
+        }
+        .review-header:hover { background: #f2f7fd; }
+        .review-header:focus-visible { outline: 3px solid #bfdbfe; outline-offset: -3px; }
+        .review-header.expanded { border-bottom: 1px solid #e2e8f0; }
+        .review-header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+        .review-header-icon {
+            flex: 0 0 42px; width: 42px; height: 42px;
+            display: grid; place-items: center; border-radius: 12px;
+            color: #1e40af; background: #eaf2ff; font-size: 17px;
+        }
+        .review-heading { display: flex; flex-direction: column; gap: 3px; }
+        .review-header-text { font-size: 16px; line-height: 1.35; font-weight: 700; color: #172554; }
+        .review-header-hint { font-size: 12px; line-height: 1.45; color: #64748b; }
+        .review-header-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .review-status {
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+            border: 1px solid #bbf7d0; border-radius: 999px; background: #f0fdf4;
+            color: #166534; font-size: 11px; line-height: 1; font-weight: 700; white-space: nowrap;
+        }
+        .review-header-arrow { color: #64748b; font-size: 13px; transition: transform .25s ease; }
+        .review-header.expanded .review-header-arrow { transform: rotate(180deg); }
+        .review-content { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+        .review-content.expanded { max-height: 1200px; }
+        .review-content-inner { padding: 20px; }
+        .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .review-item {
+            min-width: 0; padding: 14px 15px; background: #fff;
+            border: 1px solid #e5eaf1; border-radius: 10px;
+            transition: border-color .18s ease, background .18s ease;
+        }
+        .review-item:hover { border-color: #cbd8e8; background: #fbfdff; }
+        .review-item-label { margin-bottom: 5px; color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; }
+        .review-item-value { color: #1e293b; font-size: 14px; line-height: 1.5; font-weight: 600; overflow-wrap: anywhere; }
+        .review-item-value.empty { color: #94a3b8; font-weight: 400; font-style: italic; }
+        @media (max-width: 560px) {
+            .review-header { min-height: 70px; padding: 14px; gap: 10px; }
+            .review-header-left { gap: 10px; }
+            .review-header-icon { flex-basis: 38px; width: 38px; height: 38px; }
+            .review-header-hint { font-size: 11px; }
+            .review-header-right { gap: 8px; }
+            .review-status { padding: 6px 8px; font-size: 10px; }
+            .review-content-inner { padding: 14px; }
+            .review-grid { grid-template-columns: 1fr; gap: 9px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .review-header, .review-header-arrow, .review-content, .review-item { transition: none; }
+        }
+
 </style>
 </head>
 <body>
@@ -1647,19 +1716,41 @@
                                                 <label class="form-label required" for="primaryActivity">Atividade Principal</label>
                                                 <select id="primaryActivity" name="primaryActivity" class="form-input form-select" required>
                                                     <option value="">Selecione a atividade principal</option>
+                                                    <option value="Comércio varejista">Comércio varejista em geral</option>
                                                     <option value="Comércio de roupas e acessórios">Comércio de roupas e acessórios</option>
-                                                    <option value="Serviços de beleza e estética">Serviços de beleza e estética</option>
-                                                    <option value="Alimentação e bebidas">Alimentação e bebidas</option>
-                                                    <option value="Serviços de informática">Serviços de informática</option>
+                                                    <option value="Alimentação e bebidas">Alimentação, confeitaria e bebidas</option>
+                                                    <option value="Beleza e estética">Beleza, estética e cuidados pessoais</option>
+                                                    <option value="Serviços administrativos">Serviços administrativos e de escritório</option>
+                                                    <option value="Marketing e comunicação">Marketing, publicidade e comunicação</option>
+                                                    <option value="Design e conteúdo digital">Design e produção de conteúdo digital</option>
+                                                    <option value="Tecnologia e informática">Tecnologia, informática e suporte</option>
+                                                    <option value="Reparos e manutenção">Reparos e manutenção de equipamentos</option>
+                                                    <option value="Serviços para casa">Serviços domésticos e para residências</option>
+                                                    <option value="Limpeza e conservação">Limpeza e conservação</option>
+                                                    <option value="Construção e reformas">Construção, pintura e reformas</option>
+                                                    <option value="Transporte e entregas">Transporte e entregas</option>
+                                                    <option value="Educação e treinamento">Educação, aulas e treinamento</option>
+                                                    <option value="Artesanato e trabalhos manuais">Artesanato e trabalhos manuais</option>
+                                                    <option value="Costura e confecção">Costura, ajustes e confecção</option>
+                                                    <option value="Fotografia e audiovisual">Fotografia e serviços audiovisuais</option>
+                                                    <option value="Eventos e entretenimento">Eventos e entretenimento</option>
+                                                    <option value="Jardinagem e paisagismo">Jardinagem e paisagismo</option>
+                                                    <option value="Cuidados com animais">Serviços e cuidados com animais</option>
                                                     <option value="Consultoria e assessoria">Consultoria e assessoria</option>
-                                                    <option value="Serviços de limpeza">Serviços de limpeza</option>
-                                                    <option value="Artesanato">Artesanato</option>
-                                                    <option value="Serviços de manutenção">Serviços de manutenção</option>
-                                                    <option value="Transporte">Transporte</option>
-                                                    <option value="Educação e treinamento">Educação e treinamento</option>
+                                                    <option value="Serviços profissionais diversos">Outros serviços profissionais</option>
                                                     <option value="Outros">Outros</option>
                                                 </select>
                                                 <div class="error-message" id="primaryActivityError">Selecione a atividade principal</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="conditional-fields" id="otherActivityFields">
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="form-label required" for="otherActivity">Descreva sua atividade</label>
+                                                    <input type="text" id="otherActivity" name="otherActivity" class="form-input" maxlength="120" placeholder="Ex.: fabricação de velas artesanais">
+                                                    <div class="error-message" id="otherActivityError">Descreva a atividade que você exerce</div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -1703,10 +1794,16 @@
                         <div class="review-section">
                             <div class="review-header" onclick="toggleReviewSection()" role="button" tabindex="0" aria-controls="reviewContent" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewSection();}">
                                 <div class="review-header-left">
-                                    <i class="fas fa-clipboard-list review-header-icon" aria-hidden="true"></i>
-                                    <span class="review-header-text">Conferir meus dados</span>
+                                    <i class="fas fa-clipboard-check review-header-icon" aria-hidden="true"></i>
+                                    <span class="review-heading">
+                                        <span class="review-header-text">Conferir meus dados</span>
+                                        <span class="review-header-hint">Revise as informações antes de confirmar o pedido.</span>
+                                    </span>
                                 </div>
-                                <i class="fas fa-chevron-down review-header-arrow" aria-hidden="true"></i>
+                                <span class="review-header-right">
+                                    <span class="review-status"><i class="fas fa-shield-alt" aria-hidden="true"></i> Revisão segura</span>
+                                    <i class="fas fa-chevron-down review-header-arrow" aria-hidden="true"></i>
+                                </span>
                             </div>
                             <div class="review-content" id="reviewContent">
                                 <div class="review-content-inner">
@@ -1938,6 +2035,10 @@
             document.getElementById('addressActivityForm')?.addEventListener('submit', handleAddressActivitySubmit);
             document.getElementById('confirmationForm')?.addEventListener('submit', handleConfirmationSubmit);
 
+            const primaryActivitySelect = document.getElementById('primaryActivity');
+            primaryActivitySelect?.addEventListener('change', syncOtherActivityField);
+            syncOtherActivityField();
+
             // Validação de campos
             document.querySelectorAll('.form-input').forEach(input => {
                 input.addEventListener('blur', () => { if (input.id !== 'email') validateField(input); });
@@ -1973,6 +2074,21 @@
             const zipCodeInput = document.getElementById('zipCode');
             if (zipCodeInput) {
                 zipCodeInput.addEventListener('input', debounce(handleCEPLookup, CEP_LOOKUP_DELAY));
+            }
+        }
+
+        function syncOtherActivityField() {
+            const select = document.getElementById('primaryActivity');
+            const fields = document.getElementById('otherActivityFields');
+            const input = document.getElementById('otherActivity');
+            if (!select || !fields || !input) return;
+            const isOther = select.value === 'Outros';
+            fields.classList.toggle('show', isOther);
+            input.disabled = !isOther;
+            input.required = isOther;
+            if (!isOther) {
+                input.classList.remove('error', 'success');
+                document.getElementById('otherActivityError')?.classList.remove('show');
             }
         }
 
@@ -2208,6 +2324,7 @@
                 document.getElementById('conditionalFields')?.classList.add('show');
             }
             if (addressFilled) document.getElementById('addressFields')?.classList.add('show');
+            syncOtherActivityField();
             updateStepDisplay();
             updateProgress();
             restoringProgress = false;
@@ -2255,6 +2372,10 @@
             if (currentStepEl) {
                 currentStepEl.classList.add('active');
             }
+            if (currentStep === 3) {
+                setReviewSectionExpanded(true);
+                updateReviewData();
+            }
         }
 
         function updateProgress() {
@@ -2285,19 +2406,21 @@
         }
 
         // ===== SEÇÃO DE REVISÃO =====
-        function toggleReviewSection() {
+        function setReviewSectionExpanded(expanded) {
             const header = document.querySelector('.review-header');
             const content = document.getElementById('reviewContent');
-            
-            if (header && content) {
-                header.classList.toggle('expanded');
-                content.classList.toggle('expanded');
-                header.setAttribute('aria-expanded', content.classList.contains('expanded') ? 'true' : 'false');
-                
-                if (content.classList.contains('expanded')) {
-                    updateReviewData();
-                }
-            }
+            if (!header || !content) return;
+            header.classList.toggle('expanded', expanded);
+            content.classList.toggle('expanded', expanded);
+            header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        }
+
+        function toggleReviewSection() {
+            const content = document.getElementById('reviewContent');
+            if (!content) return;
+            const expanded = !content.classList.contains('expanded');
+            setReviewSectionExpanded(expanded);
+            if (expanded) updateReviewData();
         }
 
         function updateReviewData() {
@@ -2306,6 +2429,7 @@
 
             const reviewData = [
                 { label: 'Nome Completo', value: window.meiData.fullName },
+                { label: 'CPF', value: window.meiData.cpf },
                 { label: 'E-mail', value: window.meiData.email },
                 { label: 'CEP', value: window.meiData.zipCode },
                 { label: 'Endereço', value: window.meiData.address },
@@ -2313,9 +2437,7 @@
                 { label: 'Bairro', value: window.meiData.neighborhood },
                 { label: 'Cidade', value: window.meiData.city },
                 { label: 'Estado', value: window.meiData.state },
-                { label: 'Atividade Principal', value: window.meiData.primaryActivity },
-                { label: 'Nome Fantasia', value: window.meiData.tradeName || 'Não informado' },
-                { label: 'Capital Social', value: window.meiData.socialCapital }
+                { label: 'Atividade Principal', value: window.meiData.primaryActivity === 'Outros' ? (window.meiData.otherActivity || 'Outros') : window.meiData.primaryActivity }
             ];
 
             reviewGrid.innerHTML = reviewData.map(item => `
