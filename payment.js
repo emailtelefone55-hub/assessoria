@@ -1,7 +1,36 @@
+import crypto from 'node:crypto';
+
 export const BOLETO_AMOUNT_CENTS = 5990;
 
 export function digitsOnly(value = '') {
   return String(value).replace(/\D/g, '');
+}
+
+export function customerKeys(secret, customer) {
+  if (typeof secret !== 'string' || secret.length < 32) {
+    throw new Error('IDEMPOTENCY_SECRET deve ter pelo menos 32 caracteres.');
+  }
+  const cpf = digitsOnly(customer.cpf);
+  const email = String(customer.email || '').trim().toLowerCase();
+  const hmac = value => crypto.createHmac('sha256', secret).update(value).digest('hex');
+  const fingerprint = JSON.stringify({
+    name: String(customer.name || '').trim(),
+    email,
+    cpf,
+    zipCode: digitsOnly(customer.zipCode),
+    street: String(customer.street || '').trim(),
+    number: String(customer.number || '').trim(),
+    neighborhood: String(customer.neighborhood || '').trim(),
+    city: String(customer.city || '').trim(),
+    state: String(customer.state || '').trim().toUpperCase(),
+    phone: digitsOnly(customer.phone),
+    amount: BOLETO_AMOUNT_CENTS
+  });
+  return {
+    cpfKey: hmac(`cpf:${cpf}`),
+    emailKey: hmac(`email:${email}`),
+    fingerprint: hmac(`fingerprint:${fingerprint}`)
+  };
 }
 
 export function isValidCpf(value) {
