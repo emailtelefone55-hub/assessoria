@@ -115,18 +115,27 @@
     .hero-private-cta { margin-top: 16px; }
     .hero-private-cta .button { min-width: 285px; }
     .hero-private-cta-note { margin: 8px 0 0 2px; color: #6b7888; font-size: 11px; line-height: 1.45; }
-    .hero-private-cta .button,
-    .mobile-cta .button {
-      border-color: var(--cta-dark);
-      background: linear-gradient(135deg, var(--cta) 0%, #e39418 100%);
-      color: var(--navy);
-      box-shadow: 0 12px 26px rgba(201,121,11,.28), inset 0 1px 0 rgba(255,255,255,.42);
+    .hero-private-cta .button {
+      border-color: var(--blue-dark);
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(15,113,129,.10), 0 13px 28px rgba(7,91,107,.30), inset 0 1px 0 rgba(255,255,255,.18);
     }
-    .hero-private-cta .button:hover,
+    .hero-private-cta .button:hover {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--navy) 100%);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(15,113,129,.14), 0 16px 32px rgba(7,91,107,.38), inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .mobile-cta .button {
+      border-color: var(--navy);
+      background: linear-gradient(135deg, var(--navy-2) 0%, var(--navy) 100%);
+      color: #fff;
+      box-shadow: inset 4px 0 0 var(--cta), 0 9px 20px rgba(16,42,67,.26);
+    }
     .mobile-cta .button:hover {
-      background: linear-gradient(135deg, #e59a1d 0%, var(--cta-dark) 100%);
-      color: var(--navy);
-      box-shadow: 0 15px 30px rgba(201,121,11,.36), inset 0 1px 0 rgba(255,255,255,.3);
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--navy) 100%);
+      color: #fff;
+      box-shadow: inset 4px 0 0 var(--cta), 0 12px 24px rgba(16,42,67,.34);
     }
     .trust-check { display: none; }
 
