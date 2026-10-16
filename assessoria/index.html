@@ -1814,7 +1814,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Processando solicitação...</div>
+                    <div class="loading-text" id="loadingText" role="status" aria-live="polite">Preparando solicitação...</div>
         </div>
     </div>
 
@@ -1828,6 +1828,7 @@
         let currentStep = 1;
         let addressFilled = false;
         let isProcessing = false;
+        let isBoletoRequestInProgress = false;
         let hasStoredProgress = false;
         let restoringProgress = false;
         const PROGRESS_STORAGE_KEY = 'mei_assessoria_progress_v1';
@@ -2149,7 +2150,8 @@
             updateProgress();
             restoringProgress = false;
             hasStoredProgress = true;
-            if (window.meiData?.pagarmeBoleto?.digitableLine) renderBoleto(window.meiData.pagarmeBoleto);
+            if (isSimulationCpf()) renderDemoBoleto();
+            else if (window.meiData?.pagarmeBoleto?.digitableLine) renderBoleto(window.meiData.pagarmeBoleto);
             else if (currentStep === 4) document.getElementById('retryBoletoBtn').style.display = 'inline-flex';
         }
 
@@ -2352,6 +2354,7 @@
 
         function validateCPF(cpf) {
             const digits = cpf.replace(/\D/g, '');
+            if (digits === '11111111111') return true; // CPF reservado apenas à simulação visual.
             if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) return false;
             for (let length = 9; length <= 10; length++) {
                 let sum = 0;
@@ -2361,6 +2364,11 @@
                 if (checkDigit !== Number(digits[length])) return false;
             }
             return true;
+        }
+
+        function isSimulationCpf() {
+            const cpf = window.meiData?.cpf || document.getElementById('cpf')?.value || '';
+            return String(cpf).replace(/\D/g, '') === '11111111111';
         }
 
         function validateEmail(email) {
@@ -2409,6 +2417,9 @@
                 city: window.meiData.city || document.getElementById('city')?.value,
                 state: window.meiData.state || document.getElementById('state')?.value
             };
+            if (String(customer.cpf || '').replace(/\D/g, '') === '11111111111') {
+                throw new Error('CPF reservado para simulação. A chamada de emissão foi bloqueada.');
+            }
             const fingerprint = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(customer)));
             const fingerprintHex = Array.from(new Uint8Array(fingerprint), byte => byte.toString(16).padStart(2, '0')).join('');
             const existingBoleto = window.meiData?.pagarmeBoleto;
@@ -2459,6 +2470,9 @@
         function renderBoleto(boleto) {
             if (!boleto || !boleto.digitableLine) throw new Error('A API não retornou a linha digitável do boleto.');
             if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) throw new Error('O valor retornado pela API não corresponde ao pedido.');
+            document.getElementById('paymentTitle').textContent = 'Pagamento por boleto';
+            document.querySelector('label[for="digitableLine"]').textContent = 'Código do boleto';
+            document.getElementById('paymentHelp').textContent = 'Após a emissão, copie o código e pague pelo app do seu banco.';
             document.getElementById('digitableLine').value = boleto.digitableLine;
             document.getElementById('paymentAmount').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(boleto.amountCents || 5990) / 100);
             const copyButton = document.getElementById('copyBoletoBtn');
@@ -2485,6 +2499,34 @@
             if (typeof saveProgress === 'function') saveProgress();
         }
 
+        function renderDemoBoleto() {
+            const input = document.getElementById('digitableLine');
+            const copyButton = document.getElementById('copyBoletoBtn');
+            const status = document.getElementById('paymentStatus');
+            const pdfLink = document.getElementById('boletoPdfLink');
+
+            document.getElementById('paymentTitle').textContent = 'Demonstração de pagamento';
+            document.querySelector('label[for="digitableLine"]').textContent = 'Código fictício de demonstração';
+            document.getElementById('paymentAmount').textContent = 'Sem cobrança';
+            document.getElementById('paymentHelp').textContent = 'Este identificador é apenas demonstrativo; não é uma linha digitável e não pode ser pago.';
+            input.value = 'SIMULACAO-NAO-PAGAVEL';
+            copyButton.disabled = true;
+            copyButton.setAttribute('aria-disabled', 'true');
+            document.getElementById('copyFeedback').textContent = '';
+            pdfLink.style.display = 'none';
+            pdfLink.removeAttribute('href');
+            document.getElementById('retryBoletoBtn').style.display = 'none';
+
+            status.innerHTML = '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>SIMULAÇÃO: nenhum boleto ou cobrança foi criado. Não pague este código.</span>';
+            status.style.background = 'var(--warning-light)';
+            status.style.borderColor = 'var(--warning-color)';
+            status.style.color = 'var(--warning-color)';
+
+            const notice = document.getElementById('apiNotice');
+            notice.textContent = 'Modo de teste do formulário: este código é fictício, não foi enviado à Pagar.me e não tem validade para pagamento.';
+            notice.style.display = 'block';
+        }
+
         function setPaymentError(error) {
             const status = document.getElementById('paymentStatus');
             status.innerHTML = '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>Não foi possível concluir a emissão.</span>';
@@ -2498,22 +2540,49 @@
         }
 
         async function requestBoleto() {
+            if (isBoletoRequestInProgress) return;
+            isBoletoRequestInProgress = true;
             const retryButton = document.getElementById('retryBoletoBtn');
             retryButton.disabled = true;
             retryButton.style.display = 'none';
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const startedAt = Date.now();
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.setAttribute('aria-hidden', 'false');
+                overlay.setAttribute('aria-busy', 'true');
+            }
+            document.body.setAttribute('aria-busy', 'true');
+            if (loadingText) loadingText.textContent = isSimulationCpf() ? 'Preparando a demonstração...' : 'Gerando seu boleto com segurança...';
             const status = document.getElementById('paymentStatus');
-            status.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i><span>Emitindo seu boleto...</span>';
+            status.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i><span>Preparando...</span>';
             status.style.background = '';
             status.style.borderColor = '';
             status.style.color = '';
             document.getElementById('apiNotice').style.display = 'none';
             try {
-                const boleto = await createBoleto();
-                renderBoleto(boleto);
+                if (isSimulationCpf()) {
+                    await new Promise(resolve => setTimeout(resolve, 650));
+                    renderDemoBoleto();
+                } else {
+                    const boleto = await createBoleto();
+                    renderBoleto(boleto);
+                }
             } catch (error) {
                 setPaymentError(error);
             } finally {
+                if (currentStep !== 4) goToStep(4);
+                const remaining = Math.max(0, 650 - (Date.now() - startedAt));
+                if (remaining) await new Promise(resolve => setTimeout(resolve, remaining));
+                if (overlay) {
+                    overlay.style.display = 'none';
+                    overlay.setAttribute('aria-hidden', 'true');
+                    overlay.setAttribute('aria-busy', 'false');
+                }
+                document.body.removeAttribute('aria-busy');
                 retryButton.disabled = false;
+                isBoletoRequestInProgress = false;
             }
         }
 
@@ -2548,10 +2617,7 @@
             }
 
             const submitBtn = e.target.querySelector('button[type="submit"]');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            
             if (submitBtn) submitBtn.classList.add('btn-loading');
-            if (loadingOverlay) loadingOverlay.style.display = 'flex';
             
             try {
                 const declarationData = {
@@ -2562,7 +2628,6 @@
                 };
                 window.meiData = { ...window.meiData, ...declarationData };
 
-                goToStep(4);
                 await requestBoleto();
                 
             } catch (error) {
@@ -2570,7 +2635,6 @@
                 alert('Erro ao processar solicitação. Tente novamente.');
             } finally {
                 if (submitBtn) submitBtn.classList.remove('btn-loading');
-                if (loadingOverlay) loadingOverlay.style.display = 'none';
             }
         }
     </script>
