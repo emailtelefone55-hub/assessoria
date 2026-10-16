@@ -846,7 +846,7 @@
         .trust-icon {
             width: 20px;
             height: 20px;
-            background: var(--success-color);
+            background: var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1748,8 +1748,8 @@
                 <!-- Etapa 3: Revisão e confirmação -->
                 <div class="step-content" id="step3">
                     <div class="form-header">
-                        <h1 class="form-title">Abertura de CNPJ MEI</h1>
-                        <p class="form-subtitle">Revise os dados e confirme as informações.</p>
+                        <h1 class="form-title">Revise seu pedido de assessoria MEI</h1>
+                        <p class="form-subtitle">Confira os dados informados e veja o valor do serviço antes de emitir o boleto.</p>
                     </div>
 
                     <div class="form-content">
@@ -1759,11 +1759,11 @@
                                     <i class="fas fa-clipboard-check review-header-icon" aria-hidden="true"></i>
                                     <span class="review-heading">
                                         <span class="review-header-text">Conferir meus dados</span>
-                                        <span class="review-header-hint">Revise as informações antes de confirmar o pedido.</span>
+                                        <span class="review-header-hint">Confira os dados preenchidos no formulário.</span>
                                     </span>
                                 </div>
                                 <span class="review-header-right">
-                                    <span class="review-status"><i class="fas fa-shield-alt" aria-hidden="true"></i> Revisão segura</span>
+                                    <span class="review-status"><i class="fas fa-clipboard-check" aria-hidden="true"></i> Seus dados</span>
                                     <i class="fas fa-chevron-down review-header-arrow" aria-hidden="true"></i>
                                 </span>
                             </button>
@@ -1777,14 +1777,14 @@
                         <section class="fee-notice-section" aria-labelledby="servicePriceTitle">
                             <div class="fee-notice-header">
                                 <i class="fas fa-info-circle fee-notice-icon" aria-hidden="true"></i>
-                                <h2 class="fee-notice-title" id="servicePriceTitle">Taxa obrigatória</h2>
+                                <h2 class="fee-notice-title" id="servicePriceTitle">Valor da assessoria — serviço opcional</h2>
                             </div>
                             <div class="fee-notice-content">
                                 <div class="fee-highlight-box">
                                     <div class="fee-amount">R$ 59,90</div>
-                                    <div class="fee-description">Valor total da assessoria</div>
+                                    <div class="fee-description">Preço do serviço de assessoria</div>
                                 </div>
-                                <p class="fee-notice-text">O serviço oferece apoio administrativo e revisão das informações. A abertura oficial do MEI pelos canais do Governo Federal é gratuita; contratar assessoria não é obrigatório.</p>
+                                <p class="fee-notice-text">A assessoria oferece apoio administrativo e revisão das informações. É um serviço privado e opcional; a formalização oficial do MEI pode ser feita gratuitamente pelos canais do Governo Federal. Você pode comparar as opções antes de decidir.</p>
                             </div>
                         </section>
 
@@ -1794,7 +1794,7 @@
                                     <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
                                 </button>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-arrow-right" aria-hidden="true"></i> Ir para pagamento · R$ 59,90
+                                    <i class="fas fa-barcode" aria-hidden="true"></i> Emitir boleto · R$ 59,90
                                 </button>
                             </div>
                         </form>
@@ -1823,14 +1823,14 @@
                 <div class="payment-page-title">
                     <div>
                         <span class="payment-kind-badge" id="paymentKindBadge"><i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO</span>
-                        <h1 id="paymentTitle">Pagamento por boleto</h1>
+                        <h1 id="paymentTitle">Boleto da assessoria MEI</h1>
                         <p>Assessoria MEI · serviço privado e opcional</p>
                     </div>
                 </div>
                 <div class="payment-panel">
                     <div class="payment-status" id="paymentStatus" role="status" aria-live="polite">
                         <i class="fas fa-circle-info" aria-hidden="true"></i>
-                        <span>Preparando a emissão do boleto...</span>
+                        <span>Preparando a emissão do boleto da assessoria...</span>
                     </div>
                     <section class="payment-card payment-order-card" aria-labelledby="boletoCardTitle">
                         <h2 id="boletoCardTitle">Total a pagar</h2>
@@ -1846,7 +1846,7 @@
                             </button>
                         </div>
                         <p class="copy-feedback" id="copyFeedback" role="status" aria-live="polite"></p>
-                        <p class="payment-help" id="paymentHelp">Após a emissão, copie o código e pague pelo app do seu banco.</p>
+                        <p class="payment-help" id="paymentHelp">Depois da emissão, copie o código ou abra o PDF e pague pelo app ou site do seu banco. Confira o beneficiário e o valor antes de confirmar o pagamento.</p>
                         <a id="boletoPdfLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener noreferrer" style="display:none;margin-top:12px"><i class="fas fa-file-pdf" aria-hidden="true"></i> Abrir boleto em PDF</a>
                         <button id="retryBoletoBtn" class="btn btn-secondary" type="button" onclick="requestBoleto()" style="display:none;margin-top:12px"><i class="fas fa-rotate" aria-hidden="true"></i> Tentar novamente</button>
                     </section>
@@ -1859,57 +1859,57 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="summary-card">
-                <h3 class="summary-title">Resumo do Processo</h3>
+                <h3 class="summary-title">Resumo do serviço</h3>
                 
                 <div class="price-display">
-                    <div class="price-label">Serviço privado de assessoria</div>
+                    <div class="price-label">Assessoria MEI · serviço opcional</div>
                     <div class="price-value">R$ 59,90</div>
                 </div>
             </div>
 
             <div class="trust-section">
-                <h3 class="trust-title">Garantias e Benefícios</h3>
+                <h3 class="trust-title">Informações importantes</h3>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Serviço privado; não é um canal governamental</div>
+                    <div class="trust-text">Serviço privado e independente; não é um canal do governo.</div>
                 </div>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Prazo sujeito à análise e aos canais oficiais</div>
+                    <div class="trust-text">Inclui apoio administrativo e revisão das informações preenchidas.</div>
                 </div>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Atendimento conforme condições do prestador</div>
+                    <div class="trust-text">Preço apresentado nesta etapa: R$ 59,90.</div>
                 </div>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Entrega conforme escopo contratado</div>
+                    <div class="trust-text">A assessoria é opcional e não substitui os canais oficiais.</div>
                 </div>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">A formalização oficial é feita nos canais do governo</div>
+                    <div class="trust-text">A formalização oficial do MEI pode ser feita gratuitamente no portal do governo.</div>
                 </div>
                 
                 <div class="trust-item">
                     <div class="trust-icon">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Consulte os termos e a política de cancelamento</div>
+                    <div class="trust-text">Leia as condições do serviço antes de concluir o pagamento.</div>
                 </div>
             </div>
         </aside>
@@ -2588,7 +2588,7 @@
         function renderBoleto(boleto) {
             if (!boleto || !boleto.digitableLine) throw new Error('A API não retornou a linha digitável do boleto.');
             if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) throw new Error('O valor retornado pela API não corresponde ao pedido.');
-            document.getElementById('paymentTitle').textContent = 'Pagamento por boleto';
+            document.getElementById('paymentTitle').textContent = 'Boleto da assessoria MEI';
             document.getElementById('paymentStepBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> Boleto';
             document.getElementById('paymentKindBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO';
             document.querySelector('label[for="digitableLine"]').textContent = 'Código do boleto';
@@ -2678,7 +2678,7 @@
                 overlay.setAttribute('aria-busy', 'true');
             }
             document.body.setAttribute('aria-busy', 'true');
-            if (loadingText) loadingText.textContent = isSimulationCpf() ? 'Preparando a demonstração...' : 'Gerando seu boleto com segurança...';
+            if (loadingText) loadingText.textContent = isSimulationCpf() ? 'Preparando a demonstração...' : 'Solicitando a emissão do seu boleto...';
             const status = document.getElementById('paymentStatus');
             status.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i><span>Preparando...</span>';
             status.style.background = '';
