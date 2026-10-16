@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assessoria privada para MEI — demonstração</title>
+    <title>Assessoria MEI — Pagamento</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -1340,7 +1340,6 @@
             
             <div class="security-indicators">
                 <div class="private-service-badge"><i class="fas fa-store"></i> Serviço privado</div>
-                <div class="demo-badge"><i class="fas fa-flask"></i> Demonstração</div>
             </div>
         </div>
     </header>
@@ -1662,7 +1661,7 @@
                             <div class="fee-notice-content">
                                 <div class="fee-highlight-box">
                                     <div class="fee-amount">R$ 59,90</div>
-                                    <div class="fee-description">Valor total demonstrativo da assessoria</div>
+                                    <div class="fee-description">Valor total da assessoria</div>
                                 </div>
                                 <p class="fee-notice-text">O serviço oferece apoio administrativo e revisão das informações. A abertura oficial do MEI pelos canais do Governo Federal é gratuita; contratar assessoria não é obrigatório. O protocolo e a emissão de documentos oficiais dependem dos canais governamentais.</p>
                             </div>
@@ -1693,7 +1692,6 @@
                                     <i class="fas fa-arrow-right" aria-hidden="true"></i> Ir para pagamento · R$ 59,90
                                 </button>
                             </div>
-                            <p class="payment-return-help" style="text-align:center">Esta demonstração não emite boleto nem realiza cobrança.</p>
                         </form>
                     </div>
                 </div>
@@ -1727,7 +1725,7 @@
                 <div class="payment-panel">
                     <div class="payment-status" id="paymentStatus" role="status" aria-live="polite">
                         <i class="fas fa-circle-info" aria-hidden="true"></i>
-                        <span>Demonstração: a emissão ainda não está conectada. Nenhum boleto real foi gerado ou será cobrado.</span>
+                        <span>Preparando a emissão do boleto...</span>
                     </div>
                     <section class="payment-card payment-order-card" aria-labelledby="boletoCardTitle">
                         <h2 id="boletoCardTitle">Total a pagar</h2>
@@ -1744,6 +1742,8 @@
                         </div>
                         <p class="copy-feedback" id="copyFeedback" role="status" aria-live="polite"></p>
                         <p class="payment-help" id="paymentHelp">Após a emissão, copie o código e pague pelo app do seu banco.</p>
+                        <a id="boletoPdfLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener noreferrer" style="display:none;margin-top:12px"><i class="fas fa-file-pdf" aria-hidden="true"></i> Abrir boleto em PDF</a>
+                        <button id="retryBoletoBtn" class="btn btn-secondary" type="button" onclick="requestBoleto()" style="display:none;margin-top:12px"><i class="fas fa-rotate" aria-hidden="true"></i> Tentar novamente</button>
                     </section>
                     <div class="payment-note payment-disclosure">A assessoria é privada e opcional. A abertura oficial do MEI pelos canais do Governo Federal é gratuita. <a href="https://www.gov.br/pt-br/servicos/realizar-registro-como-microempreendedor-individual-mei" target="_blank" rel="noopener noreferrer">Acessar o serviço oficial gratuito</a>.</div>
                     <div id="apiNotice" class="payment-note" role="status" aria-live="polite" style="display:none"></div>
@@ -2149,6 +2149,8 @@
             updateProgress();
             restoringProgress = false;
             hasStoredProgress = true;
+            if (window.meiData?.pagarmeBoleto?.digitableLine) renderBoleto(window.meiData.pagarmeBoleto);
+            else if (currentStep === 4) document.getElementById('retryBoletoBtn').style.display = 'inline-flex';
         }
 
         function handleBeforeUnload(event) {
@@ -2394,36 +2396,125 @@
             goToStep(3);
         }
 
-        // Integração futura: implemente a rota no BACKEND e valide pedido/valor no servidor.
-        // Nunca exponha chaves ou segredos do provedor no JavaScript do navegador.
+        // A chave secreta nunca é enviada ao navegador. O backend usa a variável secreta do Render.
         async function createBoleto() {
-            // Contrato esperado: { amountCents, digitableLine }.
-            // Exemplo:
-            // const response = await fetch('/api/payments/boleto', {
-            //   method: 'POST', headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({ orderId: window.meiData.orderId, amountCents: 5990 })
-            // });
-            // if (!response.ok) throw new Error('Não foi possível gerar o boleto.');
-            // return response.json();
-            throw new Error('API de boleto ainda não conectada.');
+            const customer = {
+                fullName: window.meiData.fullName || document.getElementById('fullName')?.value,
+                cpf: window.meiData.cpf || document.getElementById('cpf')?.value,
+                email: window.meiData.email || document.getElementById('email')?.value,
+                zipCode: window.meiData.zipCode || document.getElementById('zipCode')?.value,
+                address: window.meiData.address || document.getElementById('address')?.value,
+                number: window.meiData.number || document.getElementById('number')?.value,
+                neighborhood: window.meiData.neighborhood || document.getElementById('neighborhood')?.value,
+                city: window.meiData.city || document.getElementById('city')?.value,
+                state: window.meiData.state || document.getElementById('state')?.value
+            };
+            const fingerprint = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(customer)));
+            const fingerprintHex = Array.from(new Uint8Array(fingerprint), byte => byte.toString(16).padStart(2, '0')).join('');
+            const existingBoleto = window.meiData?.pagarmeBoleto;
+            if (existingBoleto?.digitableLine) {
+                if (window.meiData.pagarmeBoletoFingerprint !== fingerprintHex) {
+                    const error = new Error('Já existe um boleto emitido para os dados anteriores. Não gere outro; use o código salvo ou confira a cobrança no painel Pagar.me.');
+                    error.retryable = false;
+                    throw error;
+                }
+                return existingBoleto;
+            }
+            if (localStorage.getItem('pagarme_unknown_reference')) {
+                const error = new Error('Há uma emissão anterior sem confirmação. Não gere outro boleto até verificar a referência informada no painel Pagar.me.');
+                error.retryable = false;
+                throw error;
+            }
+            let requestIdentity;
+            try { requestIdentity = JSON.parse(localStorage.getItem('pagarme_request_identity') || 'null'); } catch {}
+            if (!requestIdentity || requestIdentity.fingerprint !== fingerprintHex) {
+                requestIdentity = { fingerprint: fingerprintHex, id: crypto.randomUUID() };
+                localStorage.setItem('pagarme_request_identity', JSON.stringify(requestIdentity));
+            }
+
+            let response;
+            try {
+                response = await fetch('/api/boleto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ ...customer, clientRequestId: requestIdentity.id })
+                });
+            } catch {
+                localStorage.setItem('pagarme_unknown_reference', 'resultado da solicitação não confirmado');
+                const error = new Error('A conexão foi interrompida e não foi possível confirmar se houve emissão. Confira o painel Pagar.me antes de tentar novamente.');
+                error.retryable = false;
+                throw error;
+            }
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const error = new Error(result.message || 'Não foi possível emitir o boleto.');
+                error.retryable = Boolean(result.retryable);
+                if (result.state === 'unknown') localStorage.setItem('pagarme_unknown_reference', result.message || 'verifique o painel Pagar.me');
+                throw error;
+            }
+            result.customerFingerprint = fingerprintHex;
+            return result;
         }
 
         function renderBoleto(boleto) {
-            if (!boleto || !boleto.digitableLine) {
-                throw new Error('A API não retornou a linha digitável do boleto.');
-            }
-            if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) {
-                throw new Error('O valor retornado pela API não corresponde ao pedido.');
-            }
+            if (!boleto || !boleto.digitableLine) throw new Error('A API não retornou a linha digitável do boleto.');
+            if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) throw new Error('O valor retornado pela API não corresponde ao pedido.');
             document.getElementById('digitableLine').value = boleto.digitableLine;
+            document.getElementById('paymentAmount').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(boleto.amountCents || 5990) / 100);
             const copyButton = document.getElementById('copyBoletoBtn');
             copyButton.disabled = false;
             copyButton.removeAttribute('aria-disabled');
             const status = document.getElementById('paymentStatus');
-            status.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i><span>Boleto emitido. Copie a linha digitável e confira os dados no app do seu banco antes de pagar.</span>';
+            const dueDate = boleto.dueAt ? new Date(boleto.dueAt).toLocaleDateString('pt-BR') : '';
+            status.innerHTML = `<i class="fas fa-circle-check" aria-hidden="true"></i><span>Boleto emitido${dueDate ? ` com vencimento em ${dueDate}` : ''}. Pague pelo app do seu banco.</span>`;
             status.style.background = 'var(--success-light)';
             status.style.borderColor = 'var(--success-color)';
             status.style.color = 'var(--success-color)';
+            const pdfLink = document.getElementById('boletoPdfLink');
+            pdfLink.style.display = 'none';
+            pdfLink.removeAttribute('href');
+            if (boleto.pdfUrl) {
+                pdfLink.href = boleto.pdfUrl;
+                pdfLink.style.display = 'inline-flex';
+            }
+            document.getElementById('retryBoletoBtn').style.display = 'none';
+            document.getElementById('apiNotice').style.display = 'none';
+            window.meiData.pagarmeBoleto = boleto;
+            window.meiData.pagarmeBoletoFingerprint = boleto.customerFingerprint || window.meiData.pagarmeBoletoFingerprint;
+            localStorage.removeItem('pagarme_unknown_reference');
+            if (typeof saveProgress === 'function') saveProgress();
+        }
+
+        function setPaymentError(error) {
+            const status = document.getElementById('paymentStatus');
+            status.innerHTML = '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i><span>Não foi possível concluir a emissão.</span>';
+            status.style.background = 'var(--error-light)';
+            status.style.borderColor = 'var(--error-color)';
+            status.style.color = 'var(--error-color)';
+            const notice = document.getElementById('apiNotice');
+            notice.textContent = error.message;
+            notice.style.display = 'block';
+            document.getElementById('retryBoletoBtn').style.display = error.retryable ? 'inline-flex' : 'none';
+        }
+
+        async function requestBoleto() {
+            const retryButton = document.getElementById('retryBoletoBtn');
+            retryButton.disabled = true;
+            retryButton.style.display = 'none';
+            const status = document.getElementById('paymentStatus');
+            status.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i><span>Emitindo seu boleto...</span>';
+            status.style.background = '';
+            status.style.borderColor = '';
+            status.style.color = '';
+            document.getElementById('apiNotice').style.display = 'none';
+            try {
+                const boleto = await createBoleto();
+                renderBoleto(boleto);
+            } catch (error) {
+                setPaymentError(error);
+            } finally {
+                retryButton.disabled = false;
+            }
         }
 
         async function copyDigitableLine() {
@@ -2471,8 +2562,8 @@
                 };
                 window.meiData = { ...window.meiData, ...declarationData };
 
-                // Sem redirecionamento e sem emissão de cobrança: abre a tela local de boleto.
                 goToStep(4);
+                await requestBoleto();
                 
             } catch (error) {
                 console.error('Erro:', error);
