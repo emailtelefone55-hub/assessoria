@@ -1314,7 +1314,70 @@
             .payment-header-back { font-size:11px; }
         }
 
-    
+        /* ===== CHECKOUT EM FLUXO NATURAL: ROLAGEM CONFIÁVEL NO MOBILE ===== */
+        .payment-screen.active {
+            display:block !important;
+            position:relative;
+            inset:auto;
+            z-index:auto;
+            width:100%;
+            max-width:none;
+            height:auto;
+            min-height:100vh;
+            min-height:100dvh;
+            max-height:none;
+            overflow:visible;
+            box-sizing:border-box;
+            background:#f4f7fb;
+            animation:none;
+        }
+        body.payment-open .header { display:none; }
+        body.payment-open .main-container {
+            display:block;
+            width:100%;
+            max-width:none;
+            margin:0;
+            padding:0;
+        }
+        body.payment-open .main-content,
+        body.payment-open .sidebar { display:none !important; }
+        html.payment-open, body.payment-open { overflow-x:clip; overflow-y:visible; }
+        .payment-screen-body {
+            width:100%;
+            max-width:800px;
+            margin:0 auto;
+            padding:clamp(24px, 5vw, 44px) 20px calc(72px + env(safe-area-inset-bottom));
+        }
+        .payment-screen-header-inner { max-width:800px; }
+        .payment-page-title { margin-bottom:20px; }
+        .payment-page-title h1 { font-size:clamp(24px, 4vw, 32px); line-height:1.2; letter-spacing:-.02em; }
+        .payment-order-card {
+            padding:clamp(18px, 4vw, 28px);
+            border:1px solid #dce4ef;
+            border-radius:16px;
+            background:#fff;
+            box-shadow:0 12px 32px rgb(15 23 42 / .07);
+        }
+        .payment-total {
+            padding:16px;
+            border:1px solid #e2e8f0;
+            border-radius:12px;
+            background:#f8fafc;
+        }
+        .payment-status { border-radius:12px; line-height:1.55; }
+        .code-input { min-height:52px; letter-spacing:.015em; }
+        .copy-btn { min-height:52px; border-radius:10px; }
+        .payment-note { line-height:1.6; }
+        @media (max-width:640px) {
+            .payment-screen.active { width:100%; height:auto; min-height:100dvh; overflow:visible; }
+            html.payment-open, body.payment-open { overflow-x:clip; overflow-y:visible; }
+            .payment-screen-header { position:sticky; top:0; }
+            .payment-screen-body { padding:22px 14px calc(76px + env(safe-area-inset-bottom)); }
+            .payment-order-card { padding:18px 16px; }
+            .payment-total { align-items:flex-start; }
+            .payment-amount { font-size:24px; }
+        }
+
         body.review-open .main-container {
             max-width: 900px;
             grid-template-columns: minmax(0, 1fr);
@@ -1709,7 +1772,7 @@
                         <span>Assessoria MEI<small>Serviço privado</small></span>
                     </div>
                     <div class="payment-header-meta">
-                        <span class="payment-step-badge"><i class="fas fa-barcode" aria-hidden="true"></i> Boleto</span>
+                        <span class="payment-step-badge" id="paymentStepBadge"><i class="fas fa-barcode" aria-hidden="true"></i> Boleto</span>
                         <button class="payment-header-back" type="button" onclick="goToStep(3)"><i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar</button>
                     </div>
                 </div>
@@ -1717,7 +1780,7 @@
             <div class="payment-screen-body">
                 <div class="payment-page-title">
                     <div>
-                        <span class="payment-kind-badge"><i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO</span>
+                        <span class="payment-kind-badge" id="paymentKindBadge"><i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO</span>
                         <h1 id="paymentTitle">Pagamento por boleto</h1>
                         <p>Assessoria MEI · serviço privado e opcional</p>
                     </div>
@@ -2471,12 +2534,15 @@
             if (!boleto || !boleto.digitableLine) throw new Error('A API não retornou a linha digitável do boleto.');
             if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) throw new Error('O valor retornado pela API não corresponde ao pedido.');
             document.getElementById('paymentTitle').textContent = 'Pagamento por boleto';
+            document.getElementById('paymentStepBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> Boleto';
+            document.getElementById('paymentKindBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO';
             document.querySelector('label[for="digitableLine"]').textContent = 'Código do boleto';
             document.getElementById('paymentHelp').textContent = 'Após a emissão, copie o código e pague pelo app do seu banco.';
             document.getElementById('digitableLine').value = boleto.digitableLine;
             document.getElementById('paymentAmount').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(boleto.amountCents || 5990) / 100);
             const copyButton = document.getElementById('copyBoletoBtn');
             copyButton.disabled = false;
+            copyButton.style.display = 'inline-flex';
             copyButton.removeAttribute('aria-disabled');
             const status = document.getElementById('paymentStatus');
             const dueDate = boleto.dueAt ? new Date(boleto.dueAt).toLocaleDateString('pt-BR') : '';
@@ -2506,12 +2572,15 @@
             const pdfLink = document.getElementById('boletoPdfLink');
 
             document.getElementById('paymentTitle').textContent = 'Demonstração de pagamento';
+            document.getElementById('paymentStepBadge').innerHTML = '<i class="fas fa-flask" aria-hidden="true"></i> Simulação';
+            document.getElementById('paymentKindBadge').innerHTML = '<i class="fas fa-flask" aria-hidden="true"></i> DEMONSTRAÇÃO';
             document.querySelector('label[for="digitableLine"]').textContent = 'Código fictício de demonstração';
             document.getElementById('paymentAmount').textContent = 'Sem cobrança';
             document.getElementById('paymentHelp').textContent = 'Este identificador é apenas demonstrativo; não é uma linha digitável e não pode ser pago.';
             input.value = 'SIMULACAO-NAO-PAGAVEL';
             copyButton.disabled = true;
             copyButton.setAttribute('aria-disabled', 'true');
+            copyButton.style.display = 'none';
             document.getElementById('copyFeedback').textContent = '';
             pdfLink.style.display = 'none';
             pdfLink.removeAttribute('href');
