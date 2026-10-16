@@ -11,7 +11,7 @@ import {
   buildPagarmeOrder,
   extractBoleto,
   validateBoletoRequest
-} from './lib/payment.js';
+} from './payment.js';
 
 const { Pool } = pg;
 const app = express();
@@ -272,12 +272,10 @@ app.post('/api/boleto', requireSameOrigin, boletoLimiter, async (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, 'public'), {
-  index: 'index.html',
-  setHeaders(res, filePath) {
-    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-store');
-  }
-}));
+app.get('/', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.use((error, _req, res, _next) => {
   if (error?.type === 'entity.too.large') return safeError(res, 413, 'A solicitação excede o tamanho permitido.');
