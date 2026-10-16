@@ -1441,26 +1441,14 @@
         .review-item-value { color: #1e293b; font-size: 14px; line-height: 1.5; font-weight: 600; overflow-wrap: anywhere; }
         .review-item-value.empty { color: #94a3b8; font-weight: 400; font-style: italic; }
         @media (max-width: 560px) {
-            body.review-open .main-container { padding: 14px 12px 24px; }
-            body.review-open #step3 .form-header { padding: 18px 16px; }
-            body.review-open #step3 .form-title { font-size: 21px; line-height: 1.25; }
-            body.review-open #step3 .form-subtitle { font-size: 14px; line-height: 1.5; }
-            body.review-open #step3 .form-content { padding: 14px 0 24px; }
-            .review-section { margin-bottom: 20px; border-radius: 12px; }
-            .review-header { min-height: 0; padding: 14px; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
-            .review-header-left { flex: 1 1 100%; gap: 10px; }
+            .review-header { min-height: 70px; padding: 14px; gap: 10px; }
+            .review-header-left { gap: 10px; }
             .review-header-icon { flex-basis: 38px; width: 38px; height: 38px; }
-            .review-heading { min-width: 0; }
-            .review-header-text { font-size: 15px; }
-            .review-header-hint { font-size: 11px; line-height: 1.45; }
-            .review-header-right { width: 100%; justify-content: space-between; padding-left: 48px; gap: 8px; }
+            .review-header-hint { font-size: 11px; }
+            .review-header-right { gap: 8px; }
             .review-status { padding: 6px 8px; font-size: 10px; }
-            .review-content.expanded { max-height: 1600px; }
-            .review-content-inner { padding: 12px; }
-            .review-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-            .review-item { padding: 12px 13px; border-radius: 9px; }
-            .review-item-label { font-size: 10px; }
-            .review-item-value { font-size: 14px; line-height: 1.45; }
+            .review-content-inner { padding: 14px; }
+            .review-grid { grid-template-columns: 1fr; gap: 9px; }
         }
         @media (prefers-reduced-motion: reduce) {
             .review-header, .review-header-arrow, .review-content, .review-item { transition: none; }
