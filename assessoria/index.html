@@ -313,10 +313,25 @@
         }
 
         .form-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 24px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 6px;
+        }
+
+        .form-title-icon {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            font-size: 17px;
         }
 
         .form-subtitle {
@@ -1187,7 +1202,10 @@
 
         /* ===== MELHORIAS DE ACESSIBILIDADE ===== */
         .form-input:focus-visible,
-        .btn:focus-visible,
+        .btn:focus-visible {
+            outline: 3px solid var(--primary-light);
+            outline-offset: 2px;
+        }
 
         /* ===== INDICADORES DE VALIDAÇÃO ===== */
         .validation-icon {
@@ -1473,7 +1491,10 @@
                 <!-- Etapa 1: Dados Pessoais -->
                 <div class="step-content active" id="step1">
                     <div class="form-header">
-                        <h1 class="form-title">Dados Pessoais</h1>
+                        <h1 class="form-title">
+                            <i class="fas fa-user form-title-icon" aria-hidden="true"></i>
+                            <span>Dados Pessoais</span>
+                        </h1>
                         <p class="form-subtitle">Informe seus dados pessoais para iniciar o processo de abertura do MEI</p>
                     </div>
                     
@@ -2008,7 +2029,6 @@
                     const errorEl = document.getElementById('emailError');
                     if (validateEmail(emailInput.value.trim())) {
                         validateField(emailInput);
-                        emailInput.blur();
                     } else {
                         emailInput.classList.remove('error', 'success');
                         if (errorEl) errorEl.classList.remove('show');
@@ -2081,14 +2101,17 @@
             const cpfIsValid = validateCPF(cpfInput.value);
 
             if (cpfIsValid) {
-                cpfInput.blur();
                 if (loadingIndicator) loadingIndicator.classList.add('show');
                 await new Promise(resolve => setTimeout(resolve, 1200));
                 if (loadingIndicator) loadingIndicator.classList.remove('show');
                 if (conditionalFields) conditionalFields.classList.add('show');
                 showSuccessNotification('CPF validado com sucesso!');
             } else {
-                if (conditionalFields) conditionalFields.classList.remove('show');
+                // Não oculta os campos já abertos enquanto a pessoa corrige o CPF.
+                // Eles só são recolhidos quando o campo é realmente limpo.
+                if (!cpfInput.value.trim() && conditionalFields) {
+                    conditionalFields.classList.remove('show');
+                }
                 if (loadingIndicator) loadingIndicator.classList.remove('show');
             }
 
