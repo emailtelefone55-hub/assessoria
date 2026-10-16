@@ -132,7 +132,19 @@ h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:600;letter-spacin
 body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .wrap{width:calc(100% - 30px)}
 .nav-r>a{display:none}
-.hero{padding:44px 0}
+.hero{padding:32px 0 36px}
+.hero h1{font-size:34px}
+.lead{margin-top:14px;font-size:16px}
+.hero-cta{margin-top:22px}
+.sheet,.hide-m,.steps .step p,.path-main p,.path-main ul,.faq .more,.faq-cta,.closing p,.top{display:none}
+.section{padding:40px 0}
+.head{margin-bottom:22px}
+.steps{border-top-width:1px}
+.step{padding:14px 0}
+.step::before{display:inline-block;margin:0 12px 0 0;font-size:28px;vertical-align:middle}
+.step h3{display:inline;font-size:19px;vertical-align:middle}
+.path-main .btn{margin-top:18px}
+.closing{padding:40px 0}
 .hero-cta .btn,.center .btn,.closing .btn{width:100%;min-width:0}
 .sheet{padding:22px}
 .sheet dl div{grid-template-columns:1fr;gap:2px}
@@ -196,7 +208,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 <h2 id="t-paths">Assessoria privada e portal do governo são serviços diferentes.</h2>
 </div>
 <div class="paths">
-<article class="path">
+<article class="path path-main">
 <span class="tag">Serviço privado</span>
 <h3>Consultoria da LR Assessoria</h3>
 <p>Para quem quer apoio contábil de uma empresa especializada ao avaliar a formalização como MEI.</p>
@@ -234,7 +246,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 </div>
 </section>
 
-<section class="section" aria-labelledby="t-check">
+<section class="section hide-m" aria-labelledby="t-check">
 <div class="wrap">
 <div class="head">
 <p class="kicker">Antes de contratar qualquer serviço</p>
@@ -255,10 +267,10 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 <div class="faq">
 <details><summary>A LR Assessoria é um órgão do governo?</summary><p>Não. A LR Assessoria é uma empresa privada e independente, sem vínculo com o Governo Federal.</p></details>
 <details><summary>Preciso contratar a LR para usar o Portal do Empreendedor?</summary><p>Não. O portal oficial pode ser acessado diretamente pelo link desta página. A consultoria da LR é uma opção privada e separada.</p></details>
-<details><summary>Onde vejo escopo e valores?</summary><p>Na página da assessoria. Lá você confere escopo, valores e condições antes de enviar uma solicitação ou contratar.</p></details>
-<details><summary>Enviar uma solicitação me obriga a contratar?</summary><p>Não. Você avalia as condições primeiro e decide se quer seguir com a contratação.</p></details>
+<details class="more"><summary>Onde vejo escopo e valores?</summary><p>Na página da assessoria. Lá você confere escopo, valores e condições antes de enviar uma solicitação ou contratar.</p></details>
+<details class="more"><summary>Enviar uma solicitação me obriga a contratar?</summary><p>Não. Você avalia as condições primeiro e decide se quer seguir com a contratação.</p></details>
 </div>
-<div class="center"><a class="btn btn-line" href="/assessoria" data-cta="faq">Ver detalhes da assessoria</a></div>
+<div class="center faq-cta"><a class="btn btn-line" href="/assessoria" data-cta="faq">Ver detalhes da assessoria</a></div>
 </div>
 </section>
 
