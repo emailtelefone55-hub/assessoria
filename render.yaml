@@ -13,9 +13,3 @@ services:
         sync: false
       - key: PAGARME_ACCOUNT_MODE
         sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: DATABASE_SSL
-        value: "false"
-      - key: IDEMPOTENCY_SECRET
-        generateValue: true
