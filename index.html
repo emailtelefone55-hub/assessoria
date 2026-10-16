@@ -23,6 +23,8 @@
       --blue: #0f7181;
       --blue-dark: #084c61;
       --blue-soft: #e7f3f4;
+      --cta: #f0a62b;
+      --cta-dark: #c9790b;
       --lime: #d6e68b;
       --paper: #ffffff;
       --canvas: #f4f7f8;
@@ -113,6 +115,19 @@
     .hero-private-cta { margin-top: 16px; }
     .hero-private-cta .button { min-width: 285px; }
     .hero-private-cta-note { margin: 8px 0 0 2px; color: #6b7888; font-size: 11px; line-height: 1.45; }
+    .hero-private-cta .button,
+    .mobile-cta .button {
+      border-color: var(--cta-dark);
+      background: linear-gradient(135deg, var(--cta) 0%, #e39418 100%);
+      color: var(--navy);
+      box-shadow: 0 12px 26px rgba(201,121,11,.28), inset 0 1px 0 rgba(255,255,255,.42);
+    }
+    .hero-private-cta .button:hover,
+    .mobile-cta .button:hover {
+      background: linear-gradient(135deg, #e59a1d 0%, var(--cta-dark) 100%);
+      color: var(--navy);
+      box-shadow: 0 15px 30px rgba(201,121,11,.36), inset 0 1px 0 rgba(255,255,255,.3);
+    }
     .trust-check { display: none; }
 
     .hero-panel { position: relative; overflow: hidden; padding: 30px; border: 1px solid rgba(220,230,232,.95); border-radius: 20px; background: rgba(255,255,255,.96); color: var(--ink); box-shadow: 0 22px 54px rgba(20,38,63,.12); }
