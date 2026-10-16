@@ -291,6 +291,8 @@ if (isProduction && !process.env.DATABASE_URL) {
 initializeDatabase()
   .then(() => app.listen(port, '0.0.0.0', () => console.log(`Web service ready on port ${port}`)))
   .catch(error => {
-    console.error('Startup failed:', error.message);
+    console.error('Startup failed:', error?.message || String(error) || 'erro sem mensagem');
+    if (error?.code) console.error('Startup error code:', error.code);
+    if (error?.stack) console.error(error.stack);
     process.exit(1);
   });
