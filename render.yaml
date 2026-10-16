@@ -9,13 +9,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DATABASE_URL
-        sync: false
-      - key: DATABASE_SSL
-        value: "false"
       - key: PAGARME_SECRET_KEY
         sync: false
       - key: PAGARME_ACCOUNT_MODE
         sync: false
-      - key: IDEMPOTENCY_SECRET
-        generateValue: true
