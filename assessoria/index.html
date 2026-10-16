@@ -862,54 +862,6 @@
             font-weight: 500;
         }
 
-        /* ===== DECLARAÇÕES E TERMOS ===== */
-        .declaration-section {
-            background: var(--warning-light);
-            border: 1px solid var(--warning-color);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .declaration-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--warning-color);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .declaration-text {
-            font-size: 14px;
-            color: var(--gray-700);
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .checkbox-input {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: var(--primary-color);
-        }
-
-        .checkbox-label {
-            font-size: 14px;
-            color: var(--gray-700);
-            line-height: 1.5;
-            cursor: pointer;
-        }
-
         /* ===== SEÇÃO DE REVISÃO DE DADOS ===== */
         .review-section {
             background: var(--gray-50);
@@ -1236,10 +1188,6 @@
         /* ===== MELHORIAS DE ACESSIBILIDADE ===== */
         .form-input:focus-visible,
         .btn:focus-visible,
-        .checkbox-input:focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
 
         /* ===== INDICADORES DE VALIDAÇÃO ===== */
         .validation-icon {
@@ -1839,22 +1787,6 @@
                                 <p class="fee-notice-text">O serviço oferece apoio administrativo e revisão das informações. A abertura oficial do MEI pelos canais do Governo Federal é gratuita; contratar assessoria não é obrigatório.</p>
                             </div>
                         </section>
-
-                        <div class="declaration-section">
-                            <h2 class="declaration-title"><i class="fas fa-shield-halved" aria-hidden="true"></i> Confirmações necessárias</h2>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="termsAccept" name="termsAccept" class="checkbox-input" required>
-                                <label for="termsAccept" class="checkbox-label">Li e aceito os <strong>Termos de Uso</strong> e a <strong>Política de Privacidade</strong>.</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="dataAccuracy" name="dataAccuracy" class="checkbox-input" required>
-                                <label for="dataAccuracy" class="checkbox-label">Confirmo que os dados informados são verdadeiros.</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="lgpdConsent" name="lgpdConsent" class="checkbox-input" required>
-                                <label for="lgpdConsent" class="checkbox-label">Autorizo o tratamento dos meus dados pessoais conforme a LGPD.</label>
-                            </div>
-                        </div>
 
                         <form id="confirmationForm">
                             <div class="button-group">
@@ -2489,18 +2421,6 @@
                 }
             }
 
-            if (currentStep === 3) {
-                const checkboxes = currentStepEl.querySelectorAll('input[type="checkbox"][required]');
-                checkboxes.forEach(checkbox => {
-                    if (!checkbox.checked) {
-                        isValid = false;
-                        checkbox.style.outline = '2px solid var(--error-color)';
-                    } else {
-                        checkbox.style.outline = 'none';
-                    }
-                });
-            }
-
             return isValid;
         }
 
@@ -2816,7 +2736,6 @@
             e.preventDefault();
             
             if (!validateCurrentStep()) {
-                alert('Confira as confirmações obrigatórias para continuar.');
                 return;
             }
 
@@ -2824,14 +2743,6 @@
             if (submitBtn) submitBtn.classList.add('btn-loading');
             
             try {
-                const declarationData = {
-                    termsAccept: document.getElementById('termsAccept')?.checked,
-                    dataAccuracy: document.getElementById('dataAccuracy')?.checked,
-                    lgpdConsent: document.getElementById('lgpdConsent')?.checked,
-                    submissionDate: new Date().toISOString()
-                };
-                window.meiData = { ...window.meiData, ...declarationData };
-
                 await requestBoleto();
                 
             } catch (error) {
