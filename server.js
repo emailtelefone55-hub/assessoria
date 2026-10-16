@@ -202,6 +202,11 @@ app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get(['/assessoria', '/assessoria/'], (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.sendFile(path.join(__dirname, 'assessoria.html'));
+});
+
 app.use((error, _req, res, _next) => {
   if (error?.type === 'entity.too.large') return safeError(res, 413, 'A solicitação excede o tamanho permitido.');
   if (error instanceof SyntaxError && 'body' in error) return safeError(res, 400, 'JSON inválido.');
