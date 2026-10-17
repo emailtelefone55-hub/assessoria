@@ -1802,7 +1802,7 @@
                             </div>
                             <div class="fee-notice-content">
                                 <div class="fee-highlight-box">
-                                    <div class="fee-amount">R$ 59,90</div>
+                                    <div class="fee-amount">R$ 130,00</div>
                                     <div class="fee-description">Preço do serviço de assessoria</div>
                                 </div>
                                 <p class="fee-notice-text">Para finalizar o processo de abertura do seu MEI, é necessário o pagamento da taxa de processamento e formalização. Este valor cobre todos os custos administrativos e garante a emissão dos documentos oficiais.</p>
@@ -1815,7 +1815,7 @@
                                     <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
                                 </button>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-barcode" aria-hidden="true"></i> Emitir boleto · R$ 59,90
+                                    <i class="fas fa-barcode" aria-hidden="true"></i> Emitir boleto · R$ 130,00
                                 </button>
                             </div>
                         </form>
@@ -1857,7 +1857,7 @@
                         <h2 id="boletoCardTitle">Total a pagar</h2>
                         <div class="payment-total">
                             <div><span class="payment-total-label">Assessoria MEI</span></div>
-                            <strong class="payment-amount" id="paymentAmount">R$ 59,90</strong>
+                            <strong class="payment-amount" id="paymentAmount">R$ 130,00</strong>
                         </div>
                         <label class="code-label" for="digitableLine">Código do boleto</label>
                         <div class="code-row">
@@ -1884,7 +1884,7 @@
                 
                 <div class="price-display">
                     <div class="price-label">Assessoria MEI · serviço opcional</div>
-                    <div class="price-value">R$ 59,90</div>
+                    <div class="price-value">R$ 130,00</div>
                 </div>
             </div>
 
@@ -1909,7 +1909,7 @@
                     <div class="trust-icon">
                         <i class="fas fa-info"></i>
                     </div>
-                    <div class="trust-text">Preço apresentado nesta etapa: R$ 59,90.</div>
+                    <div class="trust-text">Preço apresentado nesta etapa: R$ 130,00.</div>
                 </div>
                 
                 <div class="trust-item">
@@ -2613,14 +2613,14 @@
 
         function renderBoleto(boleto) {
             if (!boleto || !boleto.digitableLine) throw new Error('A API não retornou a linha digitável do boleto.');
-            if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 5990) throw new Error('O valor retornado pela API não corresponde ao pedido.');
+            if (boleto.amountCents !== undefined && Number(boleto.amountCents) !== 13000) throw new Error('O valor retornado pela API não corresponde ao pedido.');
             document.getElementById('paymentTitle').textContent = 'Boleto da assessoria MEI';
             document.getElementById('paymentStepBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> Boleto';
             document.getElementById('paymentKindBadge').innerHTML = '<i class="fas fa-barcode" aria-hidden="true"></i> PAGAMENTO';
             document.querySelector('label[for="digitableLine"]').textContent = 'Código do boleto';
             document.getElementById('paymentHelp').textContent = 'Após a emissão, copie o código e pague pelo app do seu banco.';
             document.getElementById('digitableLine').value = boleto.digitableLine;
-            document.getElementById('paymentAmount').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(boleto.amountCents || 5990) / 100);
+            document.getElementById('paymentAmount').textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(boleto.amountCents || 13000) / 100);
             const copyButton = document.getElementById('copyBoletoBtn');
             copyButton.disabled = false;
             copyButton.style.display = 'inline-flex';
