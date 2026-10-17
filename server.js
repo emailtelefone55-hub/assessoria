@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
@@ -200,6 +201,37 @@ app.get(['/assessoria', '/assessoria/'], (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'assessoria', 'index.html'));
 });
+
+// Páginas legais permitidas. A lista fechada evita servir arquivos arbitrários.
+const POLICY_FILES = new Set([
+  'politica-privacidade.html',
+  'politica-cookies.html',
+  'politica-cancelamento-reembolso.html',
+  'termos-condicoes.html'
+]);
+
+function servePolicy(req, res, next) {
+  const filename = req.params.policy;
+  if (!POLICY_FILES.has(filename)) return next();
+
+  // Compatível com os dois layouts mais comuns do projeto:
+  // /politicas/arquivo.html ou /arquivo.html.
+  const candidates = [
+    path.join(__dirname, 'politicas', filename),
+    path.join(__dirname, filename)
+  ];
+  const filePath = candidates.find(candidate => fs.existsSync(candidate));
+
+  if (!filePath) {
+    return res.status(404).send('Política não encontrada.');
+  }
+
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.sendFile(filePath);
+}
+
+app.get('/politicas/:policy', servePolicy);
+app.get('/:policy', servePolicy);
 
 app.use((error, _req, res, _next) => {
   if (error?.type === 'entity.too.large') return safeError(res, 413, 'A solicitação excede o tamanho permitido.');
