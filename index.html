@@ -211,6 +211,9 @@
     .footer-col { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; font-size: 12px; }
     .footer-col a { color: #9bd7f3; text-decoration: none; overflow-wrap: anywhere; }
     .footer-col a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .footer-policy-links { display: flex; flex-direction: column; gap: 7px; }
+    .footer-policy-links a { color: #d5e5f4; font-size: 12px; }
+    .footer-policy-links a::before { content: "↗"; display: inline-block; margin-right: 6px; color: #9bd7f3; font-size: 11px; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 18px; margin-top: 27px; padding-top: 15px; border-top: 1px solid rgba(155,215,243,.16); color: #8191b0; font-size: 11px; }
 
     .mobile-cta { display: none; }
@@ -459,7 +462,12 @@
         <h3>Contato e políticas</h3>
         <a href="/assessoria" data-cta="footer">Página da assessoria</a>
         <a href="mailto:emailsecunda9928@gmail.com">Enviar e-mail</a>
-        <a href="/politicas/politica-privacidade.html">Política de Privacidade</a>
+        <div class="footer-policy-links" aria-label="Políticas e condições da LR Assessoria">
+          <a href="/politicas/politica-privacidade.html">Política de Privacidade</a>
+          <a href="/politicas/politica-cookies.html">Política de Cookies</a>
+          <a href="/politicas/politica-cancelamento-reembolso.html">Cancelamento e Reembolso</a>
+          <a href="/politicas/termos-condicoes.html">Termos e Condições</a>
+        </div>
         <a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor" target="_blank" rel="noopener noreferrer" data-cta="portal-footer">Portal do Empreendedor ↗</a>
       </div>
     </div>
